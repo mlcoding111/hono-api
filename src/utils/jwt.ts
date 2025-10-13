@@ -1,5 +1,9 @@
-import { sign } from 'hono/jwt';
+import jwt from 'jsonwebtoken';
 
-export async function signJwt(payload: any) {
-  return await sign(payload, process.env.JWT_SECRET!);
-}
+export const signJwt = async (payload: any) => {
+  return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '7d' });
+};
+
+export const verifyJwt = async (token: string) => {
+  return jwt.verify(token, process.env.JWT_SECRET!);
+};
