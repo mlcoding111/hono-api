@@ -1,18 +1,12 @@
 import { Hono } from 'hono'
+import { userRoute } from './routes/user';
+import { authRoute } from './routes/auth';
 
 const app = new Hono()
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
-
-app.get('/hello', (c) => {
-  return c.text('Hello World!')
-})
-
-app.get('/hello/:name', (c) => {
-  return c.text(`Hello ${c.req.param('name')}!`)
-})
+app.route('/auth', authRoute)
+app.route('/user', userRoute)
+app.get('/', (c) => c.text('Hono JWT Auth API running ✅'));
 
 
 export default app
