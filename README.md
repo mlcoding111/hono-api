@@ -2,6 +2,43 @@
 
 A modern, high-performance REST API built with **Hono** and **Bun**, featuring JWT authentication, PostgreSQL database integration, and comprehensive user management. This project demonstrates clean architecture patterns, type safety, and modern JavaScript/TypeScript best practices.
 
+## 📋 Table of Contents
+
+- [✨ Features](#-features)
+- [🏗️ Architecture](#️-architecture)
+  - [Project Structure](#project-structure)
+  - [Key Design Patterns](#key-design-patterns)
+- [🚀 Quick Start](#-quick-start)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [📚 API Documentation](#-api-documentation)
+  - [Base URL](#base-url)
+  - [Authentication Endpoints](#authentication-endpoints)
+  - [User Management Endpoints](#user-management-endpoints)
+  - [Response Format](#response-format)
+- [🛠️ Available Scripts](#️-available-scripts)
+- [🏛️ Technology Stack](#️-technology-stack)
+  - [Core Technologies](#core-technologies)
+  - [Database & ORM](#database--orm)
+  - [Authentication & Security](#authentication--security)
+  - [Development Tools](#development-tools)
+- [🔒 Security Features](#-security-features)
+- [🔄 Data Serialization](#-data-serialization)
+  - [Architecture Overview](#architecture-overview)
+  - [Implementation Pattern](#implementation-pattern)
+  - [Benefits](#benefits)
+- [🌐 Context Management](#-context-management)
+  - [User Context Injection](#user-context-injection)
+  - [Implementation Pattern](#implementation-pattern-1)
+  - [Benefits](#benefits-1)
+- [🧪 Testing](#-testing)
+- [🚀 Deployment](#-deployment)
+  - [Production Build](#production-build)
+  - [Environment Variables for Production](#environment-variables-for-production)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [🎯 Development Skills Demonstrated](#-development-skills-demonstrated)
+
 ## ✨ Features
 
 - **🔐 JWT Authentication** - Secure user registration and login with JSON Web Tokens
