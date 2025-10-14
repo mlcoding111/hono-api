@@ -1,5 +1,6 @@
 import { pgTable, serial, varchar, timestamp } from "drizzle-orm/pg-core";
 import { z } from "zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const UserSchema = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -10,9 +11,7 @@ export const UserSchema = pgTable("users", {
 
 export type User = typeof UserSchema.$inferSelect;
 
-export const RegisterUserSchema = z.object({
+export const RegisterUserSchema = createInsertSchema(UserSchema, {
   email: z.email(),
   password: z.string().min(8),
 });
-
-
