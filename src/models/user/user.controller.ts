@@ -5,16 +5,15 @@ import { authMiddleware } from "../../middleware/auth.middleware";
 
 export const UserController = new Hono();
 
-// Apply authentication middleware to all user routes
-UserController.use('*', authMiddleware);
+UserController.use("*", authMiddleware);
 
 /**
  * Get all users
  * @param c - Context
  * @returns User[]
  */
-UserController.get('/', async (c: Context) => {
-  console.log(c.get('user'));
+UserController.get("/", async (c: Context) => {
+  console.log(c.get("user"));
   const users = await UserRepository.findMany();
   return c.json(users);
 });
@@ -24,8 +23,9 @@ UserController.get('/', async (c: Context) => {
  * @param c - Context
  * @returns User
  */
-UserController.post('/', async (c: Context) => {
+UserController.post("/", async (c: Context) => {
   const { email, password } = await c.req.json();
+
   const user = await UserRepository.create(email, password);
   return c.json(user);
 });
@@ -35,11 +35,11 @@ UserController.post('/', async (c: Context) => {
  * @param c - Context
  * @returns User
  */
-UserController.get('/:id', async (c: Context) => {
+UserController.get("/:id", async (c: Context) => {
   const { id } = c.req.param();
   const user = await UserRepository.getById(id);
   if (!user) {
-    return c.json({ error: 'User not found' }, 404);
+    return c.json({ error: "User not found" }, 404);
   }
   return c.json(user);
 });
@@ -49,12 +49,12 @@ UserController.get('/:id', async (c: Context) => {
  * @param c - Context
  * @returns User
  */
-UserController.put('/:id', async (c: Context) => {
+UserController.put("/:id", async (c: Context) => {
   const { id } = c.req.param();
   const { email, password } = await c.req.json();
   const user = await UserRepository.update(id, email, password);
   if (!user) {
-    return c.json({ error: 'User not found' }, 404);
+    return c.json({ error: "User not found" }, 404);
   }
   return c.json(user);
 });
@@ -64,11 +64,11 @@ UserController.put('/:id', async (c: Context) => {
  * @param c - Context
  * @returns User
  */
-UserController.delete('/:id', async (c: Context) => {
+UserController.delete("/:id", async (c: Context) => {
   const { id } = c.req.param();
   const user = await UserRepository.delete(id);
   if (!user) {
-    return c.json({ error: 'User not found' }, 404);
+    return c.json({ error: "User not found" }, 404);
   }
   return c.json(user);
 });

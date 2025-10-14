@@ -18,8 +18,8 @@ app.onError((err, c) => {
   const isProduction = Bun.env.NODE_ENV === "production";
   const url = c.req.url;
 
-  console.log('Error on', url, err);
-  console.error(`Error on ${url}:`, err);  
+  // console.log('Error on', url, err);
+  // console.error(`Error on ${url}:`, err);  
   
   const errorResponse = {
     message: err.message || "Internal server error",

@@ -1,6 +1,8 @@
 import { Context, Hono } from "hono";
 import { AuthService } from "./auth.service";
 import { User } from "../user/user.types";
+import { zValidator } from "../../validation/validator";
+import { RegisterUserSchema } from "../../schema/user.schema";
 
 export const AuthController = new Hono();
 
@@ -9,8 +11,8 @@ export const AuthController = new Hono();
  * @param c - Context
  * @returns User
  */
-AuthController.post('/register', async (c) => {
-  const { email, password } = await c.req.json();
+AuthController.post('/register', zValidator('json', RegisterUserSchema), async (c: Context) => {
+  const { email, password } = c.get('body');
   const user = await AuthService.register(email, password);
   return c.json(user as User);
 });
