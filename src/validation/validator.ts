@@ -13,30 +13,16 @@ export const zValidator = <
 ) =>
   zv(target, schema, (result: any, c: any) => {
     const { success, error, data } = result;
-    
-    if (!result.success) {
+
+    if (!success) {
       const formattedError = error?.flatten().fieldErrors;
-      delete error.message;
+      error.status = 400;
+      error.message = "Validation failed";
       const errorResponse = formatErrorResponse(error, formattedError);
-    //   const errorResponse = {
-    //     success: false,
-        
-    //     error: {
-    //       type: 'validation_error',
-    //       message: 'Validation failed',
-    //       fields: formattedError,
-    //       details: error?.issues.map((issue: any) => ({
-    //         field: issue.path.join('.'),
-    //         message: issue.message,
-    //         code: issue.code
-    //       }))
-    //     }
-    //   };
-      
       return c.json(errorResponse, 400);
     }
-    
+
     // Store validated data in context for the next handler
-    c.set('body', data);
-    return c.next();
+    c.set("body", data);
+    // Don't call next() here - let the validator handle the flow
   });

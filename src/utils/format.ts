@@ -1,22 +1,23 @@
 import { HTTPException } from "hono/http-exception";
 import { TErrorResponse, TSuccessResponse } from "../types/response";
 import { ZodError } from "zod";
+import { ContentfulStatusCode } from "hono/utils/http-status";
 
-export function formarSuccessResponse(data: unknown, message?: string): TSuccessResponse<unknown> {
+export function formatSuccessResponse(data: unknown, message?: string): TSuccessResponse<unknown> {
   return {
     success: true,
-    data,
     message: message || "Success",
+    data,
     status_code: 200,
   };
 }
 
-export function formatErrorResponse(error: Error | ZodError, data?: unknown): TErrorResponse<unknown> {
+export function formatErrorResponse(error: Error | ZodError | HTTPException, data?: unknown): TErrorResponse<unknown> {
   const isProduction = Bun.env.NODE_ENV === "production";
   
   const errorResponse: TErrorResponse<unknown> = {
     message: error.message || "Internal server error",
-    status_code: error instanceof HTTPException ? error.status : 500,
+    status_code: (error as unknown as { status: ContentfulStatusCode }).status || 500,
     success: false,
     data: data || {},
     ...(isProduction ? {} : { stack: error.stack }),
@@ -38,6 +39,6 @@ export function sendSuccessResponse<T>(
   message?: string, 
   statusCode: number = 200
 ) {
-  const formattedResponse = formarSuccessResponse(data, message);
+  const formattedResponse = formatSuccessResponse(data, message);
   return c.json(formattedResponse, statusCode);
 }

@@ -4,7 +4,7 @@ import { AuthController } from "./models/auth/auth.controller";
 import { formatErrorResponse } from "./utils/format";
 import { responseMiddleware } from "./middleware/response.middleware";
 
-const app = new Hono();
+export const app = new Hono();
 
 /**
  * Apply response formatting middleware globally
@@ -25,7 +25,7 @@ app.get("/", (c) => c.text("Hono JWT Auth API running ✅"));
 /**
  * Port
  */
-const port = Number(Bun.env.PORT) || 3000;
+const port = Number(process.env.PORT) || 3000;
 
 /**
  * Log server running
