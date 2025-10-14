@@ -34,6 +34,6 @@ export const AuthService = {
       throw new HTTPException(401, { message: "Invalid credentials" });
 
     const token = await signJwt({ id: user.id, email: user.email });
-    return { token };
+    return { token, user };
   },
 };

@@ -2,6 +2,9 @@ import { Context, Hono } from "hono";
 import { AuthService } from "./auth.service";
 import { zValidator } from "../../validation/validator";
 import { RegisterUserSchema } from "../../schema/user.schema";
+import { UserRepository } from "../user/user.repository";
+import { UserService } from "../user/user.service";
+import { HTTPException } from "hono/http-exception";
 
 export const AuthController = new Hono();
 
@@ -23,8 +26,15 @@ AuthController.post('/register', zValidator('json', RegisterUserSchema), async (
  */
 AuthController.post('/login', async (c) => {
   const { email, password } = await c.req.json();
-  const token = await AuthService.login(email, password);
-  return c.json(token);
+  const { token, user } = await AuthService.login(email, password);
+
+  const serializedUser = UserService.serialize(user);
+  return c.json(
+    {
+      token: token,
+      user: serializedUser
+    }
+  );
 });
 
 export default AuthController;

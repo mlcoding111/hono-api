@@ -171,7 +171,8 @@ Content-Type: application/json
   "message": "Success",
   "status_code": 200,
   "data": {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": { /* user data */ }
   }
 }
 ```
