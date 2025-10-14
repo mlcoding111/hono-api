@@ -1,19 +1,36 @@
 import { drizzle } from 'drizzle-orm/neon-http';
 import { neon } from '@neondatabase/serverless';
+import { drizzle as drizzlePg } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 
-let dbInstance: ReturnType<typeof drizzle> | null = null;
+type DbInstance = ReturnType<typeof drizzle> | ReturnType<typeof drizzlePg>;
 
-export const getDb = () => {
+let dbInstance: DbInstance | null = null;
+
+export const getDb = (): DbInstance => {
   if (!dbInstance) {
-    const sql = neon(Bun.env.DATABASE_URL!);
-    dbInstance = drizzle(sql);
+    console.log('DATABASE_URL:', Bun.env.DATABASE_URL);
+    console.log('NODE_ENV:', Bun.env.NODE_ENV);
+    
+    const databaseUrl = Bun.env.DATABASE_URL!;
+    
+    // Use Neon for production, PostgreSQL for development
+    if (Bun.env.NODE_ENV === 'production') {
+      const sql = neon(databaseUrl);
+      dbInstance = drizzle(sql);
+    } else {
+      // Development - use local PostgreSQL
+      const sql = postgres(databaseUrl);
+      dbInstance = drizzlePg(sql);
+    }
   }
   return dbInstance;
 };
 
 // For backward compatibility
-export const db = new Proxy({} as ReturnType<typeof drizzle>, {
+export const db = new Proxy({} as DbInstance, {
   get(target, prop) {
-    return getDb()[prop as keyof ReturnType<typeof drizzle>];
+    const db = getDb();
+    return (db as any)[prop];
   }
 });

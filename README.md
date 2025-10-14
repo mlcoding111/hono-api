@@ -85,7 +85,7 @@ src/
 ### Prerequisites
 
 - [Bun](https://bun.sh) (latest version)
-- PostgreSQL database
+- [Docker](https://www.docker.com) and Docker Compose (for local development)
 - Node.js 18+ (if not using Bun)
 
 ### Installation
@@ -108,13 +108,20 @@ src/
    
    Configure your `.env` file:
    ```env
-   DATABASE_URL=postgresql://username:password@localhost:5432/database_name
+   # For local development (using Docker)
+   DATABASE_URL=postgresql://devuser:devpass@localhost:5433/devdb
    JWT_SECRET=your-super-secret-jwt-key-here
    PORT=3000
    NODE_ENV=development
    ```
 
-4. **Set up the database**
+4. **Start the local database**
+   ```bash
+   # Start PostgreSQL database using Docker Compose
+   docker-compose up -d
+   ```
+
+5. **Set up the database**
    ```bash
    # Generate database migrations
    bun run db:generate
@@ -126,12 +133,35 @@ src/
    bun run db:studio
    ```
 
-5. **Start the development server**
+6. **Start the development server**
    ```bash
    bun run dev
    ```
 
 The API will be available at `http://localhost:3000`
+
+### Database Setup
+
+#### Local Development
+For local development, this project uses Docker Compose to run a PostgreSQL database:
+
+- **Database**: PostgreSQL 15
+- **Host**: localhost
+- **Port**: 5433
+- **Database**: devdb
+- **Username**: devuser
+- **Password**: devpass
+
+The database will persist data in a Docker volume, so your data will be available between restarts.
+
+#### Production
+In production, the application will use the `DATABASE_URL` environment variable to connect to your production database (e.g., Neon, AWS RDS, etc.).
+
+Make sure to set the correct `DATABASE_URL` in your production environment:
+```env
+DATABASE_URL=postgresql://username:password@host:port/database
+NODE_ENV=production
+```
 
 ## 📚 API Documentation
 
