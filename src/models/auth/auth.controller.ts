@@ -1,6 +1,5 @@
 import { Context, Hono } from "hono";
 import { AuthService } from "./auth.service";
-import { User } from "../user/user.types";
 import { zValidator } from "../../validation/validator";
 import { RegisterUserSchema } from "../../schema/user.schema";
 

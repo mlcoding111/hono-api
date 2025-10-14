@@ -1,6 +1,5 @@
 import { Context, Next } from 'hono';
 import { formatSuccessResponse } from '../utils/format';
-import { ContentfulStatusCode } from 'hono/utils/http-status';
 
 /**
  * Middleware to automatically format successful responses
