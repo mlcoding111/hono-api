@@ -11,7 +11,7 @@ import { HTTPException } from "hono/http-exception";
 const app = new Hono();
 
 app.route("/auth", AuthController);
-app.route("/user", UserController);
+app.route("/users", UserController);
 
 app.get("/", (c) => c.text("Hono JWT Auth API running ✅"));
 

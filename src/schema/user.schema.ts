@@ -6,3 +6,5 @@ export const UserSchema = pgTable('users', {
   password: varchar('password', { length: 255 }).notNull(),
   createdAt: timestamp('created_at').defaultNow(),
 });
+
+export type User = typeof UserSchema.$inferSelect;

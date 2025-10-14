@@ -14,6 +14,7 @@ UserController.use('*', authMiddleware);
  * @returns User[]
  */
 UserController.get('/', async (c: Context) => {
+  console.log(c.get('user'));
   const users = await UserRepository.findMany();
   return c.json(users);
 });

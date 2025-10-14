@@ -1,5 +1,7 @@
 import { Context, Next } from 'hono';
 import { verifyJwt } from '../utils/jwt';
+import { UserRepository } from '../models/user/user.repository';
+import { HTTPException } from 'hono/http-exception';
 
 /**
  * Middleware: Protects routes that require authentication.
@@ -19,7 +21,11 @@ export const authMiddleware = async (c: Context, next: Next) => {
   try {
     const decoded = await verifyJwt(token);
     // Attach payload to context so controllers can access it
-    c.set('user', decoded);
+    const user = await UserRepository.getById(decoded.id as string);
+    if (!user) {
+        throw new HTTPException(404, { message: 'User not found' });
+    }
+    c.set('user', user);
     await next();
   } catch (err) {
     return c.json({ error: 'Invalid or expired token' }, 401);

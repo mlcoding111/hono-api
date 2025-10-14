@@ -1,5 +1,5 @@
 import { db } from "../../db";
-import { UserSchema } from "../../shcema/user.schema";
+import { UserSchema } from "../../schema/user.schema";
 import { eq } from "drizzle-orm";
 import { InferSelectModel } from "drizzle-orm";
 

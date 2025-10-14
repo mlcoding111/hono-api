@@ -1,4 +1,4 @@
 import { InferInsertModel } from "drizzle-orm";
-import { UserSchema } from "../../shcema/user.schema";
+import { UserSchema } from "../../schema/user.schema";
 
 export type User = InferInsertModel<typeof UserSchema>;
