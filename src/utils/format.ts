@@ -1,7 +1,7 @@
 import { HTTPException } from "hono/http-exception";
-import { TErrorResponse } from "../types/response";
+import { TErrorResponse, TSuccessResponse } from "../types/response";
 
-export function formarSuccessResponse(data: unknown, message?: string) {
+export function formarSuccessResponse(data: unknown, message?: string): TSuccessResponse<unknown> {
   return {
     success: true,
     data,
@@ -22,4 +22,21 @@ export function formatErrorResponse(error: Error): TErrorResponse<unknown> {
   };
 
   return errorResponse;
+}
+
+/**
+ * Helper function to send a formatted success response
+ * @param c - Hono Context
+ * @param data - Data to return
+ * @param message - Optional success message
+ * @param statusCode - HTTP status code (default: 200)
+ */
+export function sendSuccessResponse<T>(
+  c: any, 
+  data: T, 
+  message?: string, 
+  statusCode: number = 200
+) {
+  const formattedResponse = formarSuccessResponse(data, message);
+  return c.json(formattedResponse, statusCode);
 }

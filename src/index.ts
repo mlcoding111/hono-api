@@ -2,8 +2,14 @@ import { Hono } from "hono";
 import { UserController } from "./models/user/user.controller";
 import { AuthController } from "./models/auth/auth.controller";
 import { formatErrorResponse } from "./utils/format";
+import { responseMiddleware } from "./middleware/response.middleware";
 
 const app = new Hono();
+
+/**
+ * Apply response formatting middleware globally
+ */
+app.use('*', responseMiddleware);
 
 /**
  * Routes
