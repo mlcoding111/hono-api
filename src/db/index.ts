@@ -3,9 +3,11 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle as drizzlePg } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
-let dbInstance: ReturnType<typeof drizzle> | ReturnType<typeof drizzlePg> | null = null;
+type DbInstance = ReturnType<typeof drizzle> | ReturnType<typeof drizzlePg>;
 
-export const getDb = () => {
+let dbInstance: DbInstance | null = null;
+
+export const getDb = (): DbInstance => {
   if (!dbInstance) {
     console.log('DATABASE_URL:', Bun.env.DATABASE_URL);
     console.log('NODE_ENV:', Bun.env.NODE_ENV);
@@ -26,8 +28,9 @@ export const getDb = () => {
 };
 
 // For backward compatibility
-export const db = new Proxy({} as ReturnType<typeof drizzle>, {
+export const db = new Proxy({} as DbInstance, {
   get(target, prop) {
-    return getDb()[prop as keyof ReturnType<typeof drizzle>];
+    const db = getDb();
+    return (db as any)[prop];
   }
 });
