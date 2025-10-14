@@ -1,34 +1,38 @@
 import { Hono } from "hono";
 import { UserController } from "./models/user/user.controller";
 import { AuthController } from "./models/auth/auth.controller";
-import { HTTPException } from "hono/http-exception";
+import { formatErrorResponse } from "./utils/format";
 
 const app = new Hono();
 
+/**
+ * Routes
+ */
 app.route("/auth", AuthController);
 app.route("/users", UserController);
 
+/**
+ * Root route
+ */
 app.get("/", (c) => c.text("Hono JWT Auth API running ✅"));
 
+/**
+ * Port
+ */
 const port = Number(Bun.env.PORT) || 3000;
 
+/**
+ * Log server running
+ */
 console.log(`Server is running on port ${port}`);
 
+/**
+ * Error handler for errors thrown in the application
+ */
 app.onError((err, c) => {
-  const isProduction = Bun.env.NODE_ENV === "production";
-  const url = c.req.url;
+  const formattedError = formatErrorResponse(err);
 
-  // console.log('Error on', url, err);
-  // console.error(`Error on ${url}:`, err);  
-  
-  const errorResponse = {
-    message: err.message || "Internal server error",
-    status: err instanceof HTTPException ? err.status : 500,
-    success: false,
-    ...(isProduction ? {} : { stack: err.stack }),
-  };
-
-  return c.json(errorResponse, 500);
+  return c.json(formattedError, formattedError.status_code);
 });
 
 export default {
