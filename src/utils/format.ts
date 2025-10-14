@@ -1,5 +1,6 @@
 import { HTTPException } from "hono/http-exception";
 import { TErrorResponse, TSuccessResponse } from "../types/response";
+import { ZodError } from "zod";
 
 export function formarSuccessResponse(data: unknown, message?: string): TSuccessResponse<unknown> {
   return {
@@ -10,14 +11,14 @@ export function formarSuccessResponse(data: unknown, message?: string): TSuccess
   };
 }
 
-export function formatErrorResponse(error: Error): TErrorResponse<unknown> {
+export function formatErrorResponse(error: Error | ZodError, data?: unknown): TErrorResponse<unknown> {
   const isProduction = Bun.env.NODE_ENV === "production";
   
   const errorResponse: TErrorResponse<unknown> = {
     message: error.message || "Internal server error",
     status_code: error instanceof HTTPException ? error.status : 500,
     success: false,
-    data: {},
+    data: data || {},
     ...(isProduction ? {} : { stack: error.stack }),
   };
 

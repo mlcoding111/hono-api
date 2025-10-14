@@ -2,6 +2,7 @@ import { zValidator as zv } from "@hono/zod-validator";
 import { ValidationTargets } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { ZodSchema } from "zod";
+import { formatErrorResponse } from "../utils/format";
 
 export const zValidator = <
   T extends ZodSchema,
@@ -15,19 +16,22 @@ export const zValidator = <
     
     if (!result.success) {
       const formattedError = error?.flatten().fieldErrors;
-      const errorResponse = {
-        success: false,
-        error: {
-          type: 'validation_error',
-          message: 'Validation failed',
-          fields: formattedError,
-          details: error?.issues.map((issue: any) => ({
-            field: issue.path.join('.'),
-            message: issue.message,
-            code: issue.code
-          }))
-        }
-      };
+      delete error.message;
+      const errorResponse = formatErrorResponse(error, formattedError);
+    //   const errorResponse = {
+    //     success: false,
+        
+    //     error: {
+    //       type: 'validation_error',
+    //       message: 'Validation failed',
+    //       fields: formattedError,
+    //       details: error?.issues.map((issue: any) => ({
+    //         field: issue.path.join('.'),
+    //         message: issue.message,
+    //         code: issue.code
+    //       }))
+    //     }
+    //   };
       
       return c.json(errorResponse, 400);
     }
