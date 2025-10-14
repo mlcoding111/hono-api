@@ -17,7 +17,6 @@ export const responseMiddleware = async (c: Context, next: Next) => {
     if (contentType?.includes('application/json')) {
       try {
         const body = await c.res.clone().json();
-        console.log('Response body:', body);
         
         // Check if response is already formatted (has success field)
         if (body && typeof body === 'object' && 'success' in body) {
@@ -26,7 +25,6 @@ export const responseMiddleware = async (c: Context, next: Next) => {
         
         // Format the response
         const formattedResponse = formatSuccessResponse(body);
-        console.log('Formatted response:', formattedResponse);
         
         // Override the response
         c.res = new Response(JSON.stringify(formattedResponse), {

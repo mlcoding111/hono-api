@@ -1,12 +1,8 @@
-import { UserRepository } from "./user.repository";
 import { User } from "../../schema/user.schema";
+import { omit } from "lodash";
 
 export const UserService = {
     serialize: (user: User) => {
-        return {
-            id: user.id,
-            email: user.email,
-            createdAt: user.createdAt,
-        };
+        return omit(user, "password");
     },
 };

@@ -2,6 +2,7 @@ import { Context, Next } from "hono";
 import { UserRepository } from "./user.repository";
 import { Hono } from "hono";
 import { authMiddleware } from "../../middleware/auth.middleware";
+import { UserService } from "./user.service";
 
 export const UserController = new Hono();
 
@@ -15,7 +16,8 @@ UserController.use("*", authMiddleware);
 UserController.get("/", async (c: Context) => {
   console.log(c.get("user"));
   const users = await UserRepository.findMany();
-  return c.json(users);
+  const serializedUsers = users.map(UserService.serialize);
+  return c.json(serializedUsers);
 });
 
 /**
@@ -27,7 +29,8 @@ UserController.post("/", async (c: Context) => {
   const { email, password } = await c.req.json();
 
   const user = await UserRepository.create(email, password);
-  return c.json(user);
+  const serializedUser = UserService.serialize(user);
+  return c.json(serializedUser);
 });
 
 /**
@@ -41,7 +44,8 @@ UserController.get("/:id", async (c: Context) => {
   if (!user) {
     return c.json({ error: "User not found" }, 404);
   }
-  return c.json(user);
+  const serializedUser = UserService.serialize(user);
+  return c.json(serializedUser);
 });
 
 /**
@@ -56,7 +60,8 @@ UserController.put("/:id", async (c: Context) => {
   if (!user) {
     return c.json({ error: "User not found" }, 404);
   }
-  return c.json(user);
+  const serializedUser = UserService.serialize(user);
+  return c.json(serializedUser);
 });
 
 /**
@@ -70,5 +75,8 @@ UserController.delete("/:id", async (c: Context) => {
   if (!user) {
     return c.json({ error: "User not found" }, 404);
   }
-  return c.json(user);
+
+  const serializedUser = UserService.serialize(user);
+
+  return c.json(serializedUser);
 });
