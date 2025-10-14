@@ -3,6 +3,7 @@ import { UserRepository } from "./user.repository";
 import { Hono } from "hono";
 import { authMiddleware } from "../../middleware/auth.middleware";
 import { UserService } from "./user.service";
+import { HTTPException } from "hono/http-exception";
 
 export const UserController = new Hono();
 
@@ -42,7 +43,7 @@ UserController.get("/:id", async (c: Context) => {
   const { id } = c.req.param();
   const user = await UserRepository.getById(id);
   if (!user) {
-    return c.json({ error: "User not found" }, 404);
+    throw new HTTPException(404, { message: "User not found" });
   }
   const serializedUser = UserService.serialize(user);
   return c.json(serializedUser);
@@ -72,8 +73,9 @@ UserController.put("/:id", async (c: Context) => {
 UserController.delete("/:id", async (c: Context) => {
   const { id } = c.req.param();
   const user = await UserRepository.delete(id);
+  
   if (!user) {
-    return c.json({ error: "User not found" }, 404);
+    throw new HTTPException(404, { message: "User not found" });
   }
 
   const serializedUser = UserService.serialize(user);

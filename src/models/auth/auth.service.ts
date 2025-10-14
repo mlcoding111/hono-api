@@ -1,4 +1,3 @@
-
 import { HTTPException } from "hono/http-exception";
 import { hashPassword, verifyPassword } from "../../utils/hash";
 import { signJwt } from "../../utils/jwt";
@@ -13,7 +12,8 @@ export const AuthService = {
    */
   register: async (email: string, password: string) => {
     const existing = await UserRepository.getByEmail(email);
-    if (existing) throw new HTTPException(400, { message: "User already exists" });
+    if (existing)
+      throw new HTTPException(400, { message: "User already exists" });
     const hashed = await hashPassword(password);
     const user = await UserRepository.create(email, hashed);
     return user;
@@ -30,7 +30,8 @@ export const AuthService = {
     if (!user) throw new HTTPException(401, { message: "Invalid credentials" });
 
     const valid = await verifyPassword(password, user.password);
-    if (!valid) throw new HTTPException(401, { message: "Invalid credentials" });
+    if (!valid)
+      throw new HTTPException(401, { message: "Invalid credentials" });
 
     const token = await signJwt({ id: user.id, email: user.email });
     return { token };
