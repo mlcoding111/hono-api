@@ -1,4 +1,4 @@
-import { Context, Next } from "hono";
+import { Context } from "hono";
 import { UserRepository } from "./user.repository";
 import { Hono } from "hono";
 import { authMiddleware } from "../../middleware/auth.middleware";
@@ -73,7 +73,7 @@ UserController.put("/:id", async (c: Context) => {
 UserController.delete("/:id", async (c: Context) => {
   const { id } = c.req.param();
   const user = await UserRepository.delete(id);
-  
+
   if (!user) {
     throw new HTTPException(404, { message: "User not found" });
   }

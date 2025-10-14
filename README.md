@@ -14,6 +14,7 @@ A modern, high-performance REST API built with **Hono** and **Bun**, featuring J
 - **🔧 Clean Architecture** - Repository pattern with service layer separation
 - **📝 Consistent API Responses** - Standardized response formatting middleware
 - **🔒 Data Serialization** - Secure user data serialization with password exclusion
+- **🌐 Context Management** - User context injection via middleware for easy access
 - **🧪 Testing Ready** - Vitest configuration for comprehensive testing
 
 ## 🏗️ Architecture
@@ -241,6 +242,41 @@ return c.json(serializedData);
 - **Type Safety** - Compile-time validation of serialized data structure
 - **Maintainability** - Centralized serialization logic for easy updates
 
+## 🌐 Context Management
+
+The application implements a sophisticated context management system that automatically injects user data into request handlers:
+
+### User Context Injection
+- **Middleware-Based** - Authentication middleware automatically sets user context
+- **Automatic Serialization** - User data is serialized before context injection
+- **Type-Safe Access** - TypeScript ensures proper context usage
+- **Request-Scoped** - Context is available throughout the request lifecycle
+
+### Implementation Pattern
+```typescript
+// 1. Middleware sets user context
+export const authMiddleware = async (c: Context, next: Next) => {
+  const decoded = await verifyJwt(token);
+  const user = await UserRepository.getById(decoded.id);
+  c.set("user", UserService.serialize(user)); // Serialized user context
+  await next();
+};
+
+// 2. Controllers access user context
+UserController.get("/", async (c: Context) => {
+  const currentUser = c.get("user"); // Type-safe user access
+  console.log("Current user:", currentUser);
+  // ... rest of handler
+});
+```
+
+### Benefits
+- **Clean Code** - No need to manually fetch user data in each handler
+- **Performance** - User data fetched once per request, not per handler
+- **Type Safety** - TypeScript ensures proper context usage
+- **Consistency** - All protected routes have access to the same user context
+- **Security** - Serialized user data prevents accidental exposure of sensitive fields
+
 ## 🧪 Testing
 
 The project is configured with Vitest for comprehensive testing:
@@ -295,6 +331,7 @@ This project showcases proficiency in:
 - **Clean Architecture** - Separation of concerns, repository pattern, dependency injection
 - **Error Handling** - Centralized error management, custom error types
 - **Data Serialization** - Secure data transformation, schema validation, type safety
+- **Context Management** - Request-scoped data injection, middleware patterns
 - **Testing** - Test configuration and utilities
 - **Performance** - Bun runtime, efficient database queries
 - **Developer Experience** - Hot reload, database studio, comprehensive tooling
