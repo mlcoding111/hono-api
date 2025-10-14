@@ -5,6 +5,7 @@ let dbInstance: ReturnType<typeof drizzle> | null = null;
 
 export const getDb = () => {
   if (!dbInstance) {
+    console.log('DATABASE_URL:', Bun.env.DATABASE_URL);
     const sql = neon(Bun.env.DATABASE_URL!);
     dbInstance = drizzle(sql);
   }

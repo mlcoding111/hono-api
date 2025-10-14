@@ -27,7 +27,6 @@ AuthController.post('/register', zValidator('json', RegisterUserSchema), async (
 AuthController.post('/login', async (c) => {
   const { email, password } = await c.req.json();
   const { token, user } = await AuthService.login(email, password);
-
   const serializedUser = UserService.serialize(user);
   return c.json(
     {
