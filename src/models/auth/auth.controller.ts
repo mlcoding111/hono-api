@@ -25,3 +25,5 @@ AuthController.post('/login', async (c) => {
   const user = await AuthService.login(email, password);
   return c.json(user);
 });
+
+export default AuthController;
