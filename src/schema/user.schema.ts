@@ -11,7 +11,12 @@ export const UserSchema = pgTable("users", {
 
 export type User = typeof UserSchema.$inferSelect;
 
+// Drizzle-zod schemas
 export const RegisterUserSchema = createInsertSchema(UserSchema, {
   email: z.email(),
   password: z.string().min(8),
 });
+export const SerializedUserSchema = createSelectSchema(UserSchema).omit({ password: true });
+
+// Type for serialized user
+export type TSerializedUser = z.infer<typeof SerializedUserSchema>;

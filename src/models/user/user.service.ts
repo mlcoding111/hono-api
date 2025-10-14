@@ -1,8 +1,13 @@
-import { User } from "../../schema/user.schema";
-import { omit } from "lodash";
+import { SerializedUserSchema, User } from "../../schema/user.schema";
+import { TSerializedUser } from "../../schema/user.schema";
 
 export const UserService = {
-    serialize: (user: User) => {
-        return omit(user, "password");
-    },
+  /**
+   * Serialize a user
+   * @param user - User
+   * @returns SerializedUser
+   */
+  serialize: (user: User): TSerializedUser => {
+    return SerializedUserSchema.parse(user);
+  },
 };
