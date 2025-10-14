@@ -1,9 +1,4 @@
-import dotenv from "dotenv";
-
-dotenv.config();
-
 import { Hono } from "hono";
-import { serve } from "@hono/node-server";
 import { UserController } from "./models/user/user.controller";
 import { AuthController } from "./models/auth/auth.controller";
 import { HTTPException } from "hono/http-exception";
@@ -15,12 +10,12 @@ app.route("/users", UserController);
 
 app.get("/", (c) => c.text("Hono JWT Auth API running ✅"));
 
-const port = Number(process.env.PORT) || 3000;
+const port = Number(Bun.env.PORT) || 3000;
 
 console.log(`Server is running on port ${port}`);
 
 app.onError((err, c) => {
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = Bun.env.NODE_ENV === "production";
   const url = c.req.url;
 
   console.log('Error on', url, err);
@@ -36,7 +31,7 @@ app.onError((err, c) => {
   return c.json(errorResponse, 500);
 });
 
-serve({
-  fetch: app.fetch,
+export default {
   port,
-});
+  fetch: app.fetch,
+};

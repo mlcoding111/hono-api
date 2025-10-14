@@ -1,0 +1,9 @@
+[install]
+cache = false
+auto = true
+
+[install.scopes]
+"@types" = "https://registry.npmjs.org"
+
+[test]
+preload = ["./src/test-setup.ts"]
