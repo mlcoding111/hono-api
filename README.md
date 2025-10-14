@@ -13,6 +13,7 @@ A modern, high-performance REST API built with **Hono** and **Bun**, featuring J
 - **⚡ High Performance** - Built with Bun runtime for optimal speed
 - **🔧 Clean Architecture** - Repository pattern with service layer separation
 - **📝 Consistent API Responses** - Standardized response formatting middleware
+- **🔒 Data Serialization** - Secure user data serialization with password exclusion
 - **🧪 Testing Ready** - Vitest configuration for comprehensive testing
 
 ## 🏗️ Architecture
@@ -204,6 +205,42 @@ All API responses follow a consistent format:
 - **Environment Variables** - Sensitive data stored securely
 - **Error Handling** - No sensitive information leaked in error responses
 
+## 🔄 Data Serialization
+
+The application implements a comprehensive serialization system to protect sensitive data and ensure consistent API responses:
+
+### Architecture Overview
+- **Service Layer Serialization** - Each model has dedicated serialization methods in service classes
+- **Schema-Based Validation** - Zod schemas define serialized data structure and validation
+- **Automatic Field Exclusion** - Sensitive fields (passwords, tokens) are automatically excluded
+- **Type-Safe Transformation** - TypeScript ensures serialized data matches expected schemas
+
+### Implementation Pattern
+```typescript
+// 1. Define serialization schema (excludes sensitive fields)
+export const SerializedModelSchema = createSelectSchema(ModelSchema).omit({ 
+  password: true, 
+  secretKey: true 
+});
+
+// 2. Service layer serialization method
+export const ModelService = {
+  serialize: (model: Model): TSerializedModel => {
+    return SerializedModelSchema.parse(model);
+  },
+};
+
+// 3. Controller usage
+const serializedData = ModelService.serialize(rawData);
+return c.json(serializedData);
+```
+
+### Benefits
+- **Security** - Sensitive data never exposed in API responses
+- **Consistency** - Standardized serialization across all endpoints
+- **Type Safety** - Compile-time validation of serialized data structure
+- **Maintainability** - Centralized serialization logic for easy updates
+
 ## 🧪 Testing
 
 The project is configured with Vitest for comprehensive testing:
@@ -257,6 +294,7 @@ This project showcases proficiency in:
 - **Database Design** - PostgreSQL schema design, ORM usage, migrations
 - **Clean Architecture** - Separation of concerns, repository pattern, dependency injection
 - **Error Handling** - Centralized error management, custom error types
+- **Data Serialization** - Secure data transformation, schema validation, type safety
 - **Testing** - Test configuration and utilities
 - **Performance** - Bun runtime, efficient database queries
 - **Developer Experience** - Hot reload, database studio, comprehensive tooling
