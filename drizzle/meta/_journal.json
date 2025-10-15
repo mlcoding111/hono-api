@@ -8,6 +8,13 @@
       "when": 1760396129272,
       "tag": "0000_tiresome_quasimodo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1760489191777,
+      "tag": "0001_daffy_starbolt",
+      "breakpoints": true
     }
   ]
 }
