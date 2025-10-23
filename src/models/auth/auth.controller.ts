@@ -14,7 +14,7 @@ export const AuthController = new Hono();
 AuthController.post('/register', AuthValidation.register, async (c: Context) => {
   const { email, password } = getValidatedData<RegisterData>(c);
   const user = await AuthService.register(email, password);
-  return c.json(user);
+  return c.json(user, 201);
 });
 
 /**
@@ -30,7 +30,7 @@ AuthController.post('/login', AuthValidation.login, async (c: Context) => {
     {
       token: token,
       user: serializedUser
-    }
+    }, 200
   );
 });
 

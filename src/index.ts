@@ -3,13 +3,17 @@ import { UserController } from "./models/user/user.controller";
 import { AuthController } from "./models/auth/auth.controller";
 import { formatErrorResponse } from "./utils/format";
 import { responseMiddleware } from "./middleware/response.middleware";
-
+import { loggerMiddleware } from "./middleware/logger.middleware";
+import { secureHeaders } from "hono/secure-headers";
 export const app = new Hono();
 
 /**
  * Apply response formatting middleware globally
  */
-app.use('*', responseMiddleware);
+app.use("*", loggerMiddleware);
+app.use("*", secureHeaders());
+
+app.use("*", responseMiddleware);
 
 /**
  * Routes

@@ -3,7 +3,12 @@ import { ValidationTargets, Context } from "hono";
 import { ZodSchema } from "zod";
 import { formatErrorResponse } from "../utils/format";
 
-// Enhanced zValidator with better type safety and structure
+/*
+ * zValidator: extended validator with better type safety and structure
+ * @param target - The target to validate
+ * @param schema - The schema to validate
+ * @returns A function that validates the target
+ */
 export const zValidator = <
   T extends ZodSchema,
   Target extends keyof ValidationTargets
