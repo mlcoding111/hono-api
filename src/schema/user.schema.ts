@@ -21,9 +21,18 @@ export const RegisterUserSchema = createInsertSchema(UserSchema, {
   last_name: z.string().min(1),
 });
 
-export const LoginUserSchema = createInsertSchema(UserSchema, {
+export const LoginUserSchema = z.object({
   email: z.email(),
   password: z.string().min(8),
+})
+
+export const ResetPasswordSchema = z.object({
+  email: z.email(),
+});
+
+export const ChangePasswordSchema = z.object({
+  currentPassword: z.string().min(8),
+  newPassword: z.string().min(8),
 });
 
 export const SerializedUserSchema = createSelectSchema(UserSchema).omit({ password: true });
