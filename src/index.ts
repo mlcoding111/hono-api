@@ -6,6 +6,7 @@ import { responseMiddleware } from "./middleware/response.middleware";
 import { loggerMiddleware } from "./middleware/logger.middleware";
 import { secureHeaders } from "hono/secure-headers";
 import { rateLimiterMiddleware } from "./middleware/ratelimiter.middleware";
+
 export const app = new Hono();
 
 /**
