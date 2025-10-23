@@ -30,6 +30,7 @@
     "@vitest/ui": "^3.2.4",
     "bun-types": "latest",
     "drizzle-kit": "^0.31.5",
+    "mongoose": "^8.19.2",
     "typescript": "^5.7.2",
     "vitest": "^3.2.4"
   }
