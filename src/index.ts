@@ -5,14 +5,15 @@ import { formatErrorResponse } from "./utils/format";
 import { responseMiddleware } from "./middleware/response.middleware";
 import { loggerMiddleware } from "./middleware/logger.middleware";
 import { secureHeaders } from "hono/secure-headers";
+import { rateLimiterMiddleware } from "./middleware/ratelimiter.middleware";
 export const app = new Hono();
 
 /**
  * Apply response formatting middleware globally
  */
 app.use("*", loggerMiddleware);
+app.use("*", rateLimiterMiddleware);
 app.use("*", secureHeaders());
-
 app.use("*", responseMiddleware);
 
 /**
