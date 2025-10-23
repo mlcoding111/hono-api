@@ -7,7 +7,7 @@ import {
   it,
 } from "bun:test";
 import { testClient } from "hono/testing";
-import { app } from "../../../index";
+import app from "../../../app";
 import { expectSuccessResponse } from "../../../utils/test";
 import { User } from "../../../schema/user.schema";
 import { UserRepository } from "../../user/user.repository";

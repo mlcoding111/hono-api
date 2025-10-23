@@ -13,7 +13,7 @@ export const UserRepository = {
    * @returns Promise<User> - The created user object
    */
   create: async (email: string, password: string): Promise<User> => {
-    const user = await db.insert(UserSchema).values({ email, password }).returning();
+    const user = await db.insert(UserSchema).values({ email, password, first_name: '', last_name: '' }).returning();
     return user[0];
   },
 
